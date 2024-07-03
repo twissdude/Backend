@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const PORT = 3001;
+const path = require('path');
+const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(cors());
+
+app.use(express.static(path.join(__dirname, 'dist')));
 
 let persons = [
   { 
@@ -97,6 +100,10 @@ app.post('/api/persons', (request, response) => {
   persons.push(newPerson);
   response.json(newPerson);
 });
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+})
 
 
 app.listen(PORT, () => {
